@@ -179,6 +179,15 @@ end
 -- Create the sell remote and start the carry watch.
 function StealService.init(deps)
 	services = deps
+	-- A bat hit breaks a carry: the character goes straight back to its
+	-- owner and the raid fails. The bat service fires this on the bus.
+	if services.Bus ~= nil and services.Bus.CarryInterrupted ~= nil then
+		services.Bus.CarryInterrupted.Event:Connect(function(player)
+			if typeof(player) == "Instance" then
+				StealService.returnCarried(player)
+			end
+		end)
+	end
 	local sellRemote = Instance.new("RemoteEvent")
 	sellRemote.Name = "SellBrainrot"
 	sellRemote.Parent = game:GetService("ReplicatedStorage")

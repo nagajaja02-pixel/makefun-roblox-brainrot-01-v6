@@ -12,16 +12,18 @@ local services = nil
 local bases = {}
 local byPlayer = {}
 
--- The eight stand slots inside one base, two rows of four.
+-- The ten stand slots inside one base, two rows of five.
 local slotOffsets = {
-	{ x = -7.5, z = -4 },
-	{ x = -2.5, z = -4 },
-	{ x = 2.5, z = -4 },
-	{ x = 7.5, z = -4 },
-	{ x = -7.5, z = 4 },
-	{ x = -2.5, z = 4 },
-	{ x = 2.5, z = 4 },
-	{ x = 7.5, z = 4 },
+	{ x = -8, z = -4 },
+	{ x = -4, z = -4 },
+	{ x = 0, z = -4 },
+	{ x = 4, z = -4 },
+	{ x = 8, z = -4 },
+	{ x = -8, z = 4 },
+	{ x = -4, z = 4 },
+	{ x = 0, z = 4 },
+	{ x = 4, z = 4 },
+	{ x = 8, z = 4 },
 }
 
 local function mkPart(parent, name, size, pos, color, material)

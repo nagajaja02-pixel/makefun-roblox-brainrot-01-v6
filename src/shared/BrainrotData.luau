@@ -5,7 +5,7 @@
 
 local BrainrotData = {}
 
--- The thirteen characters, cheapest first. Five rarities, prices and income
+-- The sixteen characters, cheapest first. Five rarities, prices and income
 -- climbing steeply so the late game still feels like a climb. Each entry
 -- carries the colours its 3D model is built from and a one-line caption the
 -- model builder shows on its name label.
@@ -49,6 +49,15 @@ BrainrotData.Characters = {
 	{ id = "bombardiro", name = "Bombardiro Crocodilo", tier = "Mythic", price = 12500, income = 500,
 		body = Color3.fromRGB(90, 160, 80), accent = Color3.fromRGB(50, 100, 45),
 		caption = "A crocodile that drops in from the sky.", trait = "croc" },
+	{ id = "giraffa", name = "Giraffa Celeste", tier = "Mythic", price = 18000, income = 720,
+		body = Color3.fromRGB(140, 200, 240), accent = Color3.fromRGB(255, 215, 0),
+		caption = "A giraffe that grazes the clouds.", trait = "giraffe" },
+	{ id = "bananita", name = "Bananita Dolphinita", tier = "Mythic", price = 25000, income = 1000,
+		body = Color3.fromRGB(255, 235, 130), accent = Color3.fromRGB(244, 143, 177),
+		caption = "A dolphin that peels out.", trait = "dolphin" },
+	{ id = "graipuss", name = "Graipuss Medussi", tier = "Mythic", price = 35000, income = 1400,
+		body = Color3.fromRGB(180, 140, 220), accent = Color3.fromRGB(120, 60, 180),
+		caption = "A jellyfish made of grapes.", trait = "jellyfish" },
 }
 
 -- Rarity order, cheapest tier first. Used by the index menu and by the
@@ -57,23 +66,30 @@ BrainrotData.Tiers = { "Common", "Rare", "Epic", "Legendary", "Mythic" }
 
 -- Mutation: a small slice of spawns comes out Diamond (three times the
 -- income) and a slightly bigger slice comes out Gold (twice the income).
--- The rest are normal.
+-- A very rare slice comes out Rainbow (five times the income). The Golden
+-- event character is a separate thing: it only ever rides in on the golden
+-- event, also at five times the income. The rest are normal.
 BrainrotData.Mutation = {
 	goldChance = 0.07,
 	diamondChance = 0.02,
+	rainbowChance = 0.005,
 	goldMult = 2,
 	diamondMult = 3,
+	rainbowMult = 5,
+	goldenMult = 5,
 }
 
 -- The economy every system shares.
 BrainrotData.Economy = {
 	startCash = 150,
 	startStands = 4,
-	maxStands = 8,
+	maxStands = 10,
 	upgradeBase = 100,
 	sellFraction = 0.5,
 	rebirthBase = 12000,
 	rebirthBoost = 0.5,
+	milestoneEvery = 5,
+	milestoneBoost = 0.25,
 	rebirthStore = "BlitzRebirthsV1",
 }
 
@@ -84,6 +100,12 @@ BrainrotData.Conveyor = {
 	speed = 4.2,
 	startX = -131,
 	endX = 131,
+}
+
+-- The golden event: every four minutes a golden brainrot rides the belt,
+-- worth five times its normal income.
+BrainrotData.Golden = {
+	interval = 240,
 }
 
 -- The tsunami rhythm: first wave, warning window, sweep length, gap.
@@ -121,12 +143,18 @@ function BrainrotData.byId(id)
 	return nil
 end
 
--- Roll a mutation for a fresh spawn. Diamond is the rarest, Gold the next.
+-- Roll a mutation for a fresh spawn. Rainbow is the rarest, then Diamond,
+-- then Gold.
 function BrainrotData.rollMutation()
 	local roll = math.random()
-	if roll < BrainrotData.Mutation.diamondChance then
+	local rainbow = BrainrotData.Mutation.rainbowChance
+	local diamond = BrainrotData.Mutation.diamondChance
+	local gold = BrainrotData.Mutation.goldChance
+	if roll < rainbow then
+		return "Rainbow"
+	elseif roll < rainbow + diamond then
 		return "Diamond"
-	elseif roll < BrainrotData.Mutation.diamondChance + BrainrotData.Mutation.goldChance then
+	elseif roll < rainbow + diamond + gold then
 		return "Gold"
 	end
 	return "Normal"
@@ -138,6 +166,10 @@ function BrainrotData.mutationIncome(char, mutation)
 		return char.income * BrainrotData.Mutation.diamondMult
 	elseif mutation == "Gold" then
 		return char.income * BrainrotData.Mutation.goldMult
+	elseif mutation == "Rainbow" then
+		return char.income * BrainrotData.Mutation.rainbowMult
+	elseif mutation == "Golden" then
+		return char.income * BrainrotData.Mutation.goldenMult
 	end
 	return char.income
 end
@@ -152,6 +184,13 @@ end
 -- rebirths the player already has.
 function BrainrotData.rebirthCost(rebirths)
 	return BrainrotData.Economy.rebirthBase * (rebirths + 1)
+end
+
+-- The income boost from rebirths: half again per rebirth, plus a quarter
+-- more for every five rebirths as a milestone bonus.
+function BrainrotData.rebirthBoost(rebirths)
+	local milestones = math.floor(rebirths / BrainrotData.Economy.milestoneEvery)
+	return 1 + BrainrotData.Economy.rebirthBoost * rebirths + BrainrotData.Economy.milestoneBoost * milestones
 end
 
 -- What a character sells for: half what it cost to buy.

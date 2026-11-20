@@ -1,6 +1,6 @@
 [![make.fun · roblox-brainrot-01](https://make.fun/badge/roblox-brainrot-01.svg)](https://make.fun/bounty/roblox-brainrot-01?utm_source=github&utm_medium=readme&utm_campaign=roblox-brainrot-01)
-[![rank](https://make.fun/badge/roblox-brainrot-01/nagajaja02-pixel/makefun-roblox-brainrot-01-v4/rank.svg)](https://make.fun/bounty/roblox-brainrot-01)
-[![reward](https://make.fun/badge/roblox-brainrot-01/nagajaja02-pixel/makefun-roblox-brainrot-01-v4/reward.svg)](https://make.fun/bounty/roblox-brainrot-01)
+[![rank](https://make.fun/badge/roblox-brainrot-01/nagajaja02-pixel/makefun-roblox-brainrot-01-v6/rank.svg)](https://make.fun/bounty/roblox-brainrot-01)
+[![reward](https://make.fun/badge/roblox-brainrot-01/nagajaja02-pixel/makefun-roblox-brainrot-01-v6/reward.svg)](https://make.fun/bounty/roblox-brainrot-01)
 
 # Brainrot Blitz
 
@@ -12,14 +12,17 @@ The aerial thumbnail is live and approved on Roblox.
 
 ## The game
 
-- **13 brainrot characters** with viral names, from Tung Tung Tung Sahur (Common) to Bombardiro Crocodilo (Mythic), across five rarities.
+- **16 brainrot characters** with viral names, from Tung Tung Tung Sahur (Common) to Graipuss Medussi (Mythic), across five rarities.
 - **Conveyor**: new brainrots roll out every few seconds and ride the belt from the west dock to the east gate. Click one to buy it.
-- **Safehouses**: six bases around the island, each with stands for your brainrots. Start with 4 stands, upgrade up to 8.
+- **Safehouses**: six bases around the island, each with stands for your brainrots. Start with 4 stands, upgrade up to 10.
 - **Steal**: grab a brainrot off someone else's stand and carry it home. A shield blocks raids for 26 seconds, then needs a 48-second cooldown.
+- **Baseball bat**: every player gets a free wooden bat. Swing it at a raider to shove them away — hit a thief who is carrying a stolen brainrot and the raid fails on the spot.
 - **Tsunami**: a wave sweeps the island on a schedule. Climb onto a base roof or the lookout deck to stay dry.
-- **Mutations**: rare Gold (2x income) and Diamond (3x income) spawns.
-- **Rebirth**: reset for a permanent +50% income boost, with the price rising each time.
+- **Mutations**: rare Gold (2x income) and Diamond (3x income) spawns, plus a very rare Rainbow (5x income). Every four minutes a Golden Brainrot rides the belt, worth 5x its normal income.
+- **Rebirth**: reset for a permanent +50% income boost, with the price rising each time, plus +25% more for every five rebirths.
 - **Merchant**: a stall by the belt sells three characters at a time, rotating regularly.
+- **Leaderboard**: a board by the south dock shows the three richest players, refreshed every few seconds.
+- **Admin commands**: the game owner (or anyone testing in Roblox Studio) can type `/golden` to spawn a Golden Brainrot at once, `/tsunami` to trigger a tsunami at once, or `/help` for the list. An admin event turns the sky golden (for `/golden`) or storm-dark (for `/tsunami`) and shows an "ADMIN EVENT" banner to every player.
 
 ## Build
 
@@ -41,7 +44,7 @@ The entrypoint reads `MAKEFUN_OUTPUT_DIR` when it is set, and falls back to `/ou
 
 - You start with **$150** and **4 stands**.
 - Buy brainrots from the conveyor or the merchant, and place them on your stands. Each one earns money every second.
-- Upgrade your stands (up to **8**) when you can afford it; the price climbs with the square of the stands you already own.
+- Upgrade your stands (up to **10**) when you can afford it; the price climbs with the square of the stands you already own.
 - Sell a brainrot for **half its buy price** from the character menu.
 - Steal from other players by clicking their brainrots and carrying them home — but watch out: if the owner catches you, the brainrot goes straight back.
 - Raise your shield (F key or the SHIELD button) to block raids for 26 seconds. After it falls, it needs 48 seconds before it can rise again.

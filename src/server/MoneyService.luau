@@ -49,13 +49,13 @@ local function makeLeaderstats(player)
 end
 
 -- The income rate right now: every placed character's mutated income,
--- boosted by half again per rebirth the player has.
+-- boosted by rebirths (half again per rebirth, plus the milestone bonus).
 function MoneyService.getIncomePerSecond(player)
 	local total = 0
 	for _, record in ipairs(services.Base:getPlaced(player)) do
 		total += BrainrotData.mutationIncome(record.char, record.mutation)
 	end
-	local boost = 1 + BrainrotData.Economy.rebirthBoost * (rebirths[player.UserId] or 0)
+	local boost = BrainrotData.rebirthBoost(rebirths[player.UserId] or 0)
 	return math.floor(total * boost)
 end
 
@@ -174,6 +174,34 @@ local function payLoop()
 	end
 end
 
+-- The richest players, written onto the leaderboard board in the world.
+local function updateLeaderboard()
+	local refs = services.World
+	if refs == nil or refs.boardGuis == nil then
+		return
+	end
+	local ranked = {}
+	for _, player in ipairs(game:GetService("Players"):GetPlayers()) do
+		table.insert(ranked, { name = player.Name, cash = MoneyService.getCash(player) })
+	end
+	table.sort(ranked, function(a, b)
+		return a.cash > b.cash
+	end)
+	for _, gui in ipairs(refs.boardGuis) do
+		for i = 1, 3 do
+			local label = gui:FindFirstChild("Rank" .. i)
+			if label ~= nil then
+				local entry = ranked[i]
+				if entry ~= nil then
+					label.Text = tostring(i) .. ". " .. entry.name .. " - $" .. tostring(entry.cash)
+				else
+					label.Text = tostring(i) .. ". ---"
+				end
+			end
+		end
+	end
+end
+
 -- Hook players and start the pay loop.
 function MoneyService.init(deps)
 	services = deps
@@ -191,6 +219,13 @@ function MoneyService.init(deps)
 		onPlayerAdded(player)
 	end
 	task.spawn(payLoop)
+	-- The leaderboard board refreshes every few seconds.
+	task.spawn(function()
+		while true do
+			task.wait(5)
+			updateLeaderboard()
+		end
+	end)
 end
 
 return MoneyService

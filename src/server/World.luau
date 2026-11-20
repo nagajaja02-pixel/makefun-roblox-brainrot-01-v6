@@ -134,6 +134,38 @@ function World.build()
 	mkPart(island, "LookoutLegR", Vector3.new(1, 9, 1), Vector3.new(7, 4.5, -82), Color3.fromRGB(120, 85, 55), { material = Enum.Material.Wood })
 	mkSign(island, "LookoutSign", "LOOKOUT - HIGH GROUND", Vector3.new(0, 12, -78), Vector3.new(14, 3, 1), Color3.fromRGB(120, 220, 255))
 
+	-- The leaderboard board near the south dock: the richest players,
+	-- readable from both sides of the board.
+	local board = mkPart(island, "Leaderboard", Vector3.new(12, 9, 1), Vector3.new(30, 4.5, 60), Color3.fromRGB(30, 30, 40), { material = Enum.Material.SmoothPlastic })
+	local boardGuis = {}
+	for _, face in ipairs({ Enum.NormalId.Front, Enum.NormalId.Back }) do
+		local gui = Instance.new("SurfaceGui")
+		gui.Face = face
+		gui.Parent = board
+		local title = Instance.new("TextLabel")
+		title.Name = "Title"
+		title.Size = UDim2.new(1, 0, 0.25, 0)
+		title.BackgroundTransparency = 1
+		title.Text = "RICHEST"
+		title.TextColor3 = Color3.fromRGB(255, 220, 90)
+		title.TextScaled = true
+		title.Font = Enum.Font.GothamBold
+		title.Parent = gui
+		for i = 1, 3 do
+			local line = Instance.new("TextLabel")
+			line.Name = "Rank" .. i
+			line.Size = UDim2.new(1, 0, 0.25, 0)
+			line.Position = UDim2.new(0, 0, 0.25 + (i - 1) * 0.25, 0)
+			line.BackgroundTransparency = 1
+			line.Text = tostring(i) .. ". ---"
+			line.TextColor3 = Color3.fromRGB(255, 255, 255)
+			line.TextScaled = true
+			line.Font = Enum.Font.Gotham
+			line.Parent = gui
+		end
+		table.insert(boardGuis, gui)
+	end
+
 	-- The spawn pads near the south dock.
 	local spawn = Instance.new("SpawnLocation")
 	spawn.Name = "Spawn"
@@ -154,6 +186,7 @@ function World.build()
 		belt = belt,
 		deck = deck,
 		spawn = spawn,
+		boardGuis = boardGuis,
 	}
 end
 

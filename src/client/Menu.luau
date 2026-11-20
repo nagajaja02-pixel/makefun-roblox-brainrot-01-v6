@@ -124,7 +124,7 @@ local function buildPanel()
 
 	heading(panel, "SELL (your stands)", y)
 	y += 34
-	for stand = 1, 8 do
+	for stand = 1, BrainrotData.maxStands do
 		rowButton(panel, "Stand " .. tostring(stand) .. " - sell for half price", "SELL", y, function()
 			ReplicatedStorage:WaitForChild("SellBrainrot"):FireServer(stand)
 		end)

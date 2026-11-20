@@ -11,6 +11,7 @@ local WaveService = {}
 local services = nil
 local warnRemote = nil
 local waveWall = nil
+local waveRunning = false
 
 -- The height that counts as safe: roofs and the lookout sit above it.
 local safeHeight = 6
@@ -73,8 +74,13 @@ local function sweepHit(hit)
 	end
 end
 
--- One wave: warn, then sweep the wall across the island.
+-- One wave: warn, then sweep the wall across the island. Returns false
+-- when a wave is already running, so two waves never overlap.
 local function runWave()
+	if waveRunning then
+		return false
+	end
+	waveRunning = true
 	warnRemote:FireAllClients("warn", BrainrotData.Wave.warnTime)
 	task.wait(BrainrotData.Wave.warnTime)
 	warnRemote:FireAllClients("sweep", BrainrotData.Wave.sweepTime)
@@ -89,6 +95,18 @@ local function runWave()
 	end
 	waveWall.Position = Vector3.new(0, 7, -120)
 	warnRemote:FireAllClients("clear")
+	waveRunning = false
+	return true
+end
+
+-- Trigger a wave right now, outside the schedule. Returns false when a
+-- wave is already running. Used by admins testing the tsunami by hand.
+function WaveService.triggerWave()
+	if waveRunning then
+		return false
+	end
+	task.spawn(runWave)
+	return true
 end
 
 -- The wave loop: first wave after the opening delay, then one every gap.

@@ -52,6 +52,12 @@ local function nameLabel(model, char, mutation)
 	elseif mutation == "Diamond" then
 		tag = tag .. " • DIAMOND x3"
 		sub.TextColor3 = Color3.fromRGB(120, 220, 255)
+	elseif mutation == "Rainbow" then
+		tag = tag .. " • RAINBOW x5"
+		sub.TextColor3 = Color3.fromRGB(255, 80, 220)
+	elseif mutation == "Golden" then
+		tag = tag .. " • GOLDEN x5"
+		sub.TextColor3 = Color3.fromRGB(255, 200, 0)
 	else
 		sub.TextColor3 = Color3.fromRGB(220, 220, 220)
 	end
@@ -130,6 +136,24 @@ local function addTrait(model, trait, body, accent)
 		part(model, "Snout", Vector3.new(1.2, 0.6, 1.4), Vector3.new(0, 1.2, -1.1), accent, Enum.Material.SmoothPlastic)
 		part(model, "Tail", Vector3.new(0.4, 0.5, 1.6), Vector3.new(0, 1.0, 1.4), accent, Enum.Material.SmoothPlastic)
 		part(model, "Bomb", Vector3.new(0.7, 0.7, 0.7), Vector3.new(0, 3.2, 0), Color3.fromRGB(40, 40, 40), Enum.Material.Metal)
+	elseif trait == "giraffe" then
+		-- A sky giraffe with a long neck, a head in the clouds and two little horns.
+		part(model, "Neck", Vector3.new(0.5, 0.8, 0.5), Vector3.new(0, 3.5, 0), body, Enum.Material.SmoothPlastic)
+		part(model, "GiraffeHead", Vector3.new(0.9, 0.5, 0.9), Vector3.new(0, 4.1, -0.1), accent, Enum.Material.SmoothPlastic)
+		part(model, "OssiconeL", Vector3.new(0.2, 0.4, 0.2), Vector3.new(-0.3, 4.5, -0.1), accent, Enum.Material.SmoothPlastic)
+		part(model, "OssiconeR", Vector3.new(0.2, 0.4, 0.2), Vector3.new(0.3, 4.5, -0.1), accent, Enum.Material.SmoothPlastic)
+	elseif trait == "dolphin" then
+		-- A banana dolphin with a dorsal fin, a tail and a peel.
+		part(model, "DorsalFin", Vector3.new(0.2, 0.9, 0.7), Vector3.new(0, 2.9, 0.2), accent, Enum.Material.SmoothPlastic)
+		part(model, "DolphinTail", Vector3.new(0.9, 0.4, 0.4), Vector3.new(0, 0.7, 0.9), accent, Enum.Material.SmoothPlastic)
+		part(model, "Peel", Vector3.new(0.4, 1.2, 0.4), Vector3.new(-0.9, 2.2, 0.2), Color3.fromRGB(255, 235, 59), Enum.Material.SmoothPlastic)
+	elseif trait == "jellyfish" then
+		-- A grape jellyfish with a dome and three dangling tentacles.
+		local dome = part(model, "Dome", Vector3.new(1.6, 0.8, 1.6), Vector3.new(0, 3.2, 0), accent, Enum.Material.SmoothPlastic)
+		dome.Shape = Enum.PartType.Ball
+		part(model, "TentacleL", Vector3.new(0.25, 1.2, 0.25), Vector3.new(-0.6, 0.9, 0), body, Enum.Material.SmoothPlastic)
+		part(model, "TentacleR", Vector3.new(0.25, 1.2, 0.25), Vector3.new(0.6, 0.9, 0), body, Enum.Material.SmoothPlastic)
+		part(model, "TentacleM", Vector3.new(0.25, 1.4, 0.25), Vector3.new(0, 0.8, 0), body, Enum.Material.SmoothPlastic)
 	end
 end
 
@@ -159,6 +183,10 @@ function BrainrotModels.build(char, mutation)
 		part(model, "Trim", Vector3.new(2.3, 0.25, 1.6), Vector3.new(0, 0.25, 0), Color3.fromRGB(255, 215, 0), Enum.Material.Neon)
 	elseif mutation == "Diamond" then
 		part(model, "Trim", Vector3.new(2.3, 0.25, 1.6), Vector3.new(0, 0.25, 0), Color3.fromRGB(120, 220, 255), Enum.Material.Neon)
+	elseif mutation == "Rainbow" then
+		part(model, "Trim", Vector3.new(2.3, 0.25, 1.6), Vector3.new(0, 0.25, 0), Color3.fromRGB(255, 80, 220), Enum.Material.Neon)
+	elseif mutation == "Golden" then
+		part(model, "Trim", Vector3.new(2.3, 0.25, 1.6), Vector3.new(0, 0.25, 0), Color3.fromRGB(255, 200, 0), Enum.Material.Neon)
 	end
 
 	-- The readable name label above the model.

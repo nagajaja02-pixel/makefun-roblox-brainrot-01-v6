@@ -10,11 +10,24 @@ local BaseService = require(script.Parent.BaseService)
 local ShieldService = require(script.Parent.ShieldService)
 local ConveyorService = require(script.Parent.ConveyorService)
 local StealService = require(script.Parent.StealService)
+local BatService = require(script.Parent.BatService)
 local WaveService = require(script.Parent.WaveService)
 local MerchantService = require(script.Parent.MerchantService)
+local AdminService = require(script.Parent.AdminService)
 
 -- The island first: everything else stands on it.
 local refs = World.build()
+
+-- The server bus: BindableEvents services use to talk to each other
+-- without requiring each other at load time.
+local busFolder = Instance.new("Folder")
+busFolder.Name = "BrainrotBus"
+busFolder.Parent = game:GetService("ServerScriptService")
+local bus = {}
+local carryInterrupted = Instance.new("BindableEvent")
+carryInterrupted.Name = "CarryInterrupted"
+carryInterrupted.Parent = busFolder
+bus.CarryInterrupted = carryInterrupted
 
 -- The service table every service receives in init.
 local services = {
@@ -23,21 +36,26 @@ local services = {
 	Shield = ShieldService,
 	Conveyor = ConveyorService,
 	Steal = StealService,
+	Bat = BatService,
 	Wave = WaveService,
 	Merchant = MerchantService,
+	Admin = AdminService,
+	Bus = bus,
 	World = refs,
 }
 
 -- Start the services in a fixed order: money and bases first (players
 -- need cash and a plot the moment they arrive), then the shield, the
--- belt, the stealing rules, the waves and the merchant.
+-- belt, the stealing rules, the bat, the waves, the merchant and admin.
 MoneyService.init(services)
 BaseService.init(services)
 ShieldService.init(services)
 ConveyorService.init(services)
 StealService.init(services)
+BatService.init(services)
 WaveService.init(services)
 MerchantService.init(services)
+AdminService.init(services)
 
 print("[Brainrot Blitz] Server ready: " .. #BrainrotData.Bases .. " bases, " .. #BrainrotData.Characters .. " characters, island built.")
 

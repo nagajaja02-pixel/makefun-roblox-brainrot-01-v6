@@ -54,10 +54,9 @@ local function priceTag(model, char, mutation)
 	label.Parent = gui
 end
 
--- Spawn one character at the start of the belt.
-local function spawnOne()
-	local char = pickCharacter()
-	local mutation = BrainrotData.rollMutation()
+-- Spawn one character at the start of the belt, with a given character
+-- and mutation. The caller picks both; this only builds and registers it.
+local function spawnWith(char, mutation)
 	local model = BrainrotModels.build(char, mutation)
 	model:PivotTo(CFrame.new(BrainrotData.Conveyor.startX, 1, 0) * CFrame.Angles(0, math.rad(90), 0))
 	model.Parent = workspace.Island
@@ -83,6 +82,18 @@ local function spawnOne()
 
 	table.insert(items, item)
 	return item
+end
+
+-- Spawn one ordinary character: a weighted pick with a rolled mutation.
+local function spawnOne()
+	return spawnWith(pickCharacter(), BrainrotData.rollMutation())
+end
+
+-- Spawn a golden event character: any character, but golden, worth five
+-- times its normal income. Used by the golden timer and by admins.
+function ConveyorService.spawnGolden()
+	spawnWith(pickCharacter(), "Golden")
+	return true
 end
 
 -- Move every item along the belt; drop the ones that reach the far end.
@@ -149,6 +160,13 @@ function ConveyorService.init(deps)
 	-- A few characters already on the belt when the first player arrives.
 	spawnOne()
 	spawnOne()
+	-- The golden event: a golden brainrot every four minutes.
+	task.spawn(function()
+		while true do
+			task.wait(BrainrotData.Golden.interval)
+			ConveyorService.spawnGolden()
+		end
+	end)
 end
 
 return ConveyorService
